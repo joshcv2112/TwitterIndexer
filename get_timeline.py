@@ -1,3 +1,9 @@
+# THIS CODE IS NOT MY OWN
+# Credit goes to Austin Songer whose code can be found at the following link:
+# https://github.com/caseyfitz/trumpnet/blob/d7ef55e96649a52a86e5ff1486749e5806390f61/twitterscrape.py
+
+
+
 import urllib2
 import csv
 import json
