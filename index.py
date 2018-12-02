@@ -40,6 +40,7 @@ def index_tokens_dict(token_list):
             index[token[0]] = [token[1]]
     return index
 
+# This isn't really being used anymore!
 def get_max_term(index):
     x = 0
     while x < 10:
@@ -56,36 +57,40 @@ def get_max_term(index):
 
 def sort_index(index):
     x = 0
-    while x < 21:
+    sorted_index = {}
+    while x < 100:
         max_len = 0
         term = ""
+
         for i in index:
             if max_len < len(index[i]):
                 max_len = len(index[i])
                 term = i
 
-
-        # instead of just deleting this, add the thing to a new
-        # index that is sorted and return it at end
-
-        # I think index[term] is the postings list itself
-        # and term is the term that represents that postings list.
+        sorted_index[term] = index[term]
         del index[term]
-
-        # Add that index to a new thing that will end up being an ordered index.
-        # Do it in a different function maybe, then save that new index to a new CSV file
-        # Then in another python file, we can then search a term and browse tweets that contain that term.
-
-        print("term: " + term)
-        print("max len: " + str(max_len) + '\n')
         x += 1
+    return sorted_index
+
+def save_index(index, path):
+    with open('./indexes/realDonaldTrump.csv', 'w') as f:
+        csv_writer = csv.writer(f)
+        csv_writer.writerow(['term', 'postings_list'])
+        for term in index:
+            postings_list = index[term]
+            postings_str = ""
+            for id in postings_list:
+                postings_str += id
+                postings_str += " "
+            csv_writer.writerow([term, postings_str])
+    print('Index saved to: ' + path)
 
 t0 = time.clock()
 
-tweet_list = objectify_tweets('./final_timelines/nytimes.csv')
+tweet_list = objectify_tweets('./final_timelines/realDonaldTrump.csv')
 token_list = tokenize_tweet_list(tweet_list)
 index = index_tokens_dict(token_list)
-#get_max_term(index)
-sort_index(index)
+index = sort_index(index)
+save_index(index, './indexes/realDonaldTrump.csv')
 
 print time.clock(), ' total elapsed time.'
